@@ -16,9 +16,27 @@ export class EntityRenderer {
 
     // Render items on ground (only if visible)
     if (items) {
+      let blinkPhase = Date.now() / 1000 * Math.PI * 2; // 2s blink cycle
       for (const item of items) {
-        // Items don't have x,y positions in current model — they're placed at generation time
-        // This is a stub for future item rendering
+        const ix = (item as any).x;
+        const iy = (item as any).y;
+        if (ix === undefined || iy === undefined) continue;
+
+        // Visibility check
+        if (iy >= 0 && iy < (visibleTiles?.length ?? 0) && ix >= 0 && ix < (visibleTiles?.[0]?.length ?? 0)) {
+          if (!visibleTiles[iy][ix]) continue;
+        }
+
+        // Blink animation: alpha oscillates 0.6 ↔ 1.0
+        const alpha = 0.6 + 0.4 * (Math.sin(blinkPhase + ix + iy) * 0.5 + 0.5);
+
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = '#ffd700';
+        ctx.font = `bold ${t * 0.7}px "JetBrains Mono", monospace`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('$', ix * t + t / 2, iy * t + t / 2);
+        ctx.globalAlpha = 1;
       }
     }
 

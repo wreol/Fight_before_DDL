@@ -43,9 +43,10 @@ export default function StatusBar() {
 
       {/* Stats */}
       <div className="ml-auto flex gap-3 text-xs text-[#80848e]">
-        <span>ATK {player.attack}</span>
-        <span>DEF {player.defense}</span>
-        <span>回合 {turnCount}</span>
+        <span>⚔ {player.attack}</span>
+        <span>🛡 {player.defense}</span>
+        <span>💀 {gameState.totalKills}</span>
+        <span>🕐 {turnCount}</span>
       </div>
     </div>
   );

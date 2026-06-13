@@ -70,8 +70,13 @@ export class GameEngine {
         seed,
         status: 'playing',
         floor: 1,
-        messageLog: [],
+        messageLog: [
+          '█ 欢迎来到大学地牢！',
+          '↑↓←→ 移动/攻击  I 使用药水  空格 等待',
+          `你是一名${player.level === 1 ? '大一新生' : '大学生'}，找到 ▼ 楼梯往下一层，活到毕业！`,
+        ],
         turnCount: 0,
+        totalKills: 0,
         exploredTiles,
         visibleTiles,
       };
@@ -176,7 +181,9 @@ export class GameEngine {
         this.state.status = 'dead';
       }
 
-      // Remove dead enemies
+      // Remove dead enemies and count kills
+      const killed = this.state.enemies.filter(e => e.hp <= 0).length;
+      this.state.totalKills += killed;
       this.state.enemies = this.state.enemies.filter(e => e.hp > 0);
 
       this.endTurn();
@@ -190,9 +197,11 @@ export class GameEngine {
     // Check item pickup
     this.checkItemPickup(tx, ty);
 
-    // Check stairs
+    // Check stairs — auto descend
     if (targetTile === Tile.STAIRS_DOWN) {
-      this.state.messageLog.push('发现向下的楼梯！可以下到下一层。');
+      this.state.messageLog.push('▼ 你走下了楼梯，进入下一层...');
+      this.descend();
+      return { turnProcessed: true };
     }
 
     this.endTurn();

@@ -14,6 +14,7 @@ interface GameStore {
   selectAugment: (augmentId: string) => void;
   descend: () => void;
   setGameState: (state: GameState) => void;
+  returnToMenu: () => void;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -53,5 +54,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setGameState: (gameState: GameState) => {
     set({ gameState });
+  },
+
+  returnToMenu: () => {
+    set({ engine: null, gameState: null });
   },
 }));

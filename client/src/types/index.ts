@@ -108,6 +108,7 @@ export interface GameState {
   floor: number;
   messageLog: string[];
   turnCount: number;
+  totalKills: number;  // enemies killed this run
   exploredTiles: boolean[][];
   visibleTiles: boolean[][];
 }

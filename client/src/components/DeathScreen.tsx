@@ -1,15 +1,21 @@
+import { useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { calculateSoulPoints } from '../save/saveManager';
+import { calculateSoulPoints, addSoulPoints } from '../save/saveManager';
 
 export default function DeathScreen() {
   const gameState = useGameStore((s) => s.gameState);
   const startNewGame = useGameStore((s) => s.startNewGame);
+  const returnToMenu = useGameStore((s) => s.returnToMenu);
 
   if (!gameState || gameState.status !== 'dead') return null;
 
-  const { player, floor, turnCount, enemies, seed } = gameState;
-  const enemiesKilled = enemies.filter((e) => e.hp <= 0).length;
-  const soulPoints = calculateSoulPoints(floor, enemiesKilled);
+  const { player, floor, turnCount, seed, totalKills } = gameState;
+  const soulPoints = calculateSoulPoints(floor, totalKills);
+
+  // Save soul points on death (once)
+  useEffect(() => {
+    addSoulPoints(soulPoints);
+  }, []);
 
   return (
     <div
@@ -31,7 +37,7 @@ export default function DeathScreen() {
             </div>
             <div className="text-[#80848e] text-right">击杀敌人</div>
             <div className="text-[#ffffff] text-left font-bold">
-              {enemiesKilled}
+              {totalKills}
             </div>
             <div className="text-[#80848e] text-right">GPA</div>
             <div className="text-[#faa61a] text-left font-bold">
@@ -63,7 +69,7 @@ export default function DeathScreen() {
             再来一局
           </button>
           <button
-            onClick={() => startNewGame(Date.now().toString())}
+            onClick={returnToMenu}
             className="bg-[#5865f2] hover:bg-[#4752c4] text-white px-6 py-2 rounded transition-colors"
           >
             返回首页
