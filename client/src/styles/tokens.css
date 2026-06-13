@@ -1,0 +1,16 @@
+/* Discord Design System tokens -- see SPEC S5.2 for full palette */
+:root {
+  --color-canvas-bg: #0a0a0f;
+  --color-wall: #1a1a2e;
+  --color-floor: #16213e;
+  --color-player: #00d4ff;
+  --color-enemy: #f23f43;
+  --color-elite: #f0b232;
+  --color-boss: #ff6b9d;
+  --color-item: #ffd700;
+  --color-stairs: #ffffff;
+  --color-fov-dim: rgba(10, 10, 15, 0.7);
+  --color-common: #80848e;
+  --color-rare: #5865f2;
+  --color-legendary: #faa61a;
+}
